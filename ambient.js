@@ -53,8 +53,14 @@ class streetLamp {
         this.headLamp = new THREE.CubeGeometry(5,8,5);
         this.headLampMaterial = new THREE.MeshPhongMaterial({map: this.texture});
         this.headLamp = new THREE.Mesh(this.headLamp, this.headLampMaterial)
-        if (posY<0) this.headLamp.position.set(posX,posY+3,18);
-        else this.headLamp.position.set(posX,posY-3,18)
+        if (posY<0) {
+            this.headLamp.position.set(posX-2,posY+3,18);
+            this.headLamp.rotation.z+=0.5;
+        }
+        else {
+            this.headLamp.position.set(posX+2,posY-3,18)
+            this.headLamp.rotation.z+=0.5;
+        }
         this.group.add(this.headLamp)
         scene.add(this.group)
     }

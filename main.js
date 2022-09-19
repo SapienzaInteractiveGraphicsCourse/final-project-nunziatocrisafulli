@@ -1,28 +1,73 @@
-var scene, renderer, light, spotLight1, spotLight2;
-var ambient = true;
+// global var
+var scene, renderer;
 
-function switchLight(streetL1, streetL2) {
+// light var
+var light, spotLight1, spotLight2;
+var ambient = true, lightSwitch = false;
+
+// objects var
+var startL, startL, street, finishL, bush1, bush2, tree1, tree2, streetL1, streetL2;
+
+
+
+function initListeners() {
+    document.getElementById("lightSwitch").onclick = function(){lightSwitch = true};
+}
+
+function refreshLight() {
+
+    if (lightSwitch) {
+        scene.remove(light);
+        scene.remove(spotLight1);
+        scene.remove(spotLight2);
+        lightSwitch=!lightSwitch;
+        ambient=!ambient;
+    }
+
     if (ambient == true) {
-        light = new THREE.AmbientLight(0xffffff, 1 );
+        light = new THREE.AmbientLight(0xffffff, 1);
         scene.add( light );
     } else {
-        scene.remove(light)
         light = new THREE.AmbientLight(0xffffff, 0.5 );
         scene.add( light );
+
+        spotLight1 = new THREE.SpotLight( 0xffffff, 1 );
+        spotLight1.position.set( 55, -62, 18 );
+        spotLight1.penumbra = 0.05;
+        spotLight1.decay = 8;
+        spotLight1.distance = 500;
+        spotLight1.shadow.mapSize.width = 1024;
+        spotLight1.shadow.mapSize.height = 1024;
+        spotLight1.shadow.camera.near = 10;
+        spotLight1.shadow.camera.far = 200;
+        scene.add( spotLight1 );
+
+        spotLight2 = new THREE.SpotLight( 0xffffff, 1 );
+        spotLight2.position.set( -55, 62,  18);
+        spotLight2.penumbra = 0.05;
+        spotLight2.decay = 8;
+        spotLight2.distance = 500;
+        spotLight2.shadow.mapSize.width = 1024;
+        spotLight2.shadow.mapSize.height = 1024;
+        spotLight2.shadow.camera.near = 10;
+        spotLight2.shadow.camera.far = 200;
+        scene.add( spotLight2 );
     }
+
+    lightSwitch = false;
 }
 
 function createAmbient() {
-    var startL = new startLawn();
-    var street = new Street();
-    var finishL = new finishLawn();
-    var bush1 = new Bush(-35);
-    var bush2 = new Bush(35);
-    var tree1 = new Tree(-35);
-    var tree2 = new Tree(35);
-    var streetL1 = new streetLamp(55, -62);
-    var streetL2 = new streetLamp(-55, 62);
-    switchLight(streetL1, streetL2);
+    startL = new startLawn();
+    street = new Street();
+    finishL = new finishLawn();
+    bush1 = new Bush(-35);
+    bush2 = new Bush(35);
+    tree1 = new Tree(-35);
+    tree2 = new Tree(35);
+    streetL1 = new streetLamp(55, -62);
+    streetL2 = new streetLamp(-55, 62);
+    refreshLight();
 }
 
 function createObjects() {
@@ -50,6 +95,7 @@ function init() {
 	renderer.setSize(width, height);
     document.body.appendChild(renderer.domElement);
 
+    initListeners();
     createAmbient();
     //createObjects();
     //enableAnimations();
@@ -61,6 +107,9 @@ function init() {
 }
 
 function render() {
+    if (lightSwitch) {
+        refreshLight();
+    }
     requestAnimationFrame( render );
     renderer.render(scene, camera);    
 }
