@@ -12,7 +12,7 @@ class startLawn {
 
 class Bush {
     constructor(posX, posY = -54, posZ = 0) {
-        this.bushGeometry = new THREE.DodecahedronBufferGeometry(10,2);
+        this.bushGeometry = new THREE.DodecahedronBufferGeometry(10,1);
         this.texture = new THREE.TextureLoader().load('texture/bush.jpg');
         this.texture.anisotropy = renderer.capabilities.getMaxAnisotropy();
         this.bushMaterial = new THREE.MeshPhongMaterial({ map: this.texture});
@@ -25,15 +25,14 @@ class Bush {
 class Tree { // trunk + bush
     constructor(posX = 0) {
         this.group = new THREE.Group();
-
         this.trunkGeometry = new THREE.BoxBufferGeometry(2,2,32);
         this.texture = new THREE.TextureLoader().load('texture/trunk.jpg');
         this.texture.anisotropy = renderer.capabilities.getMaxAnisotropy();
         this.trunkMaterial = new THREE.MeshPhongMaterial({ map: this.texture });
         this.trunk = new THREE.Mesh(this.trunkGeometry, this.trunkMaterial);
-        this.trunk.position.set(posX,62,0);
+        this.trunk.position.set(posX,62,16);
         this.group.add(this.trunk)
-        this.bush = new Bush(posX, 62, 15);
+        this.bush = new Bush(posX, 62, 31);
         this.bush.bush.scale.set(0.8, 0.8, 0.8)
         this.group.add(this.bush);
         scene.add(this.group)
@@ -48,17 +47,17 @@ class streetLamp {
         this.texture.anisotropy = renderer.capabilities.getMaxAnisotropy();
         this.lampTrunkMaterial = new THREE.MeshPhongMaterial({ map: this.texture });
         this.lampTrunk = new THREE.Mesh(this.lampTrunkGeometry, this.lampTrunkMaterial);
-        this.lampTrunk.position.set(posX,posY,0);
+        this.lampTrunk.position.set(posX,posY,15);
         this.group.add(this.lampTrunk)
         this.headLamp = new THREE.CubeGeometry(5,8,5);
         this.headLampMaterial = new THREE.MeshPhongMaterial({map: this.texture});
         this.headLamp = new THREE.Mesh(this.headLamp, this.headLampMaterial)
         if (posY<0) {
-            this.headLamp.position.set(posX-2,posY+3,18);
+            this.headLamp.position.set(posX-2,posY+3,33);
             this.headLamp.rotation.z+=0.5;
         }
         else {
-            this.headLamp.position.set(posX+2,posY-3,18)
+            this.headLamp.position.set(posX+2,posY-3,33)
             this.headLamp.rotation.z+=0.5;
         }
         this.group.add(this.headLamp)

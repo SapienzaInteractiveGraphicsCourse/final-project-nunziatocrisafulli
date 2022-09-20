@@ -6,7 +6,8 @@ var light, spotLight1, spotLight2;
 var ambient = true, lightSwitch = false;
 
 // objects var
-var startL, startL, street, finishL, bush1, bush2, tree1, tree2, streetL1, streetL2;
+var startL, startL, street, finishL, bush1, bush2, tree1, tree2, streetL1, streetL2, car;
+var vehicles = [];
 
 
 
@@ -14,25 +15,33 @@ function initListeners() {
     document.getElementById("lightSwitch").onclick = function(){lightSwitch = true};
 }
 
+function turnOffVehiclesLights() {
+    TODO
+}
+
+function turnOnVehiclesLights() {
+    TODO
+}
+
 function refreshLight() {
 
     if (lightSwitch) {
         scene.remove(light);
-        scene.remove(spotLight1);
-        scene.remove(spotLight2);
+        streetL1.headLamp.remove( spotLight1 );
+        streetL2.headLamp.remove( spotLight2 );
+        //turnOffVehiclesLights()
         lightSwitch=!lightSwitch;
         ambient=!ambient;
     }
 
     if (ambient == true) {
-        light = new THREE.AmbientLight(0xffffff, 1);
+        light = new THREE.AmbientLight(0xffffff, 1.2);
         scene.add( light );
     } else {
         light = new THREE.AmbientLight(0xffffff, 0.5 );
         scene.add( light );
 
         spotLight1 = new THREE.SpotLight( 0xffffff, 1 );
-        spotLight1.position.set( 55, -62, 18 );
         spotLight1.penumbra = 0.05;
         spotLight1.decay = 8;
         spotLight1.distance = 500;
@@ -40,10 +49,9 @@ function refreshLight() {
         spotLight1.shadow.mapSize.height = 1024;
         spotLight1.shadow.camera.near = 10;
         spotLight1.shadow.camera.far = 200;
-        scene.add( spotLight1 );
+        streetL1.headLamp.add( spotLight1 );
 
         spotLight2 = new THREE.SpotLight( 0xffffff, 1 );
-        spotLight2.position.set( -55, 62,  18);
         spotLight2.penumbra = 0.05;
         spotLight2.decay = 8;
         spotLight2.distance = 500;
@@ -51,7 +59,9 @@ function refreshLight() {
         spotLight2.shadow.mapSize.height = 1024;
         spotLight2.shadow.camera.near = 10;
         spotLight2.shadow.camera.far = 200;
-        scene.add( spotLight2 );
+        streetL2.headLamp.add( spotLight2 );
+
+        //turnOnVehiclesLights();
     }
 
     lightSwitch = false;
@@ -70,8 +80,9 @@ function createAmbient() {
     refreshLight();
 }
 
-function createObjects() {
-    TODO
+function spawnVehicles() {
+   //car = new Car(0xee4b2b);
+   //scene.add(car.centralBlock)
 }
 
 function enableAnimations() {
@@ -88,20 +99,23 @@ function init() {
   
     scene = new THREE.Scene();
     
-    camera = new THREE.PerspectiveCamera(80, width / height, 0.1, 1000);
+    camera = new THREE.PerspectiveCamera(45, width / height, 0.1, 1000);
     renderer = new THREE.WebGLRenderer();
 
-    renderer.setClearColor(0x00000000);
+    renderer.setClearColor(0xffffff);
 	renderer.setSize(width, height);
     document.body.appendChild(renderer.domElement);
 
     initListeners();
     createAmbient();
-    //createObjects();
+    spawnVehicles();
     //enableAnimations();
     //runGame();
 
-    camera.position.set(0, -40, 120); // x, y, z move along y to follow animal
+    camera.position.set(0, -200, 150); // x, y, z move along y to follow animal
+    //camera.position.set(0, 0, 120);
+    //camera.position.set(0, -40, 50);
+    //camera.position.set(-40, 0, 0);
     camera.lookAt(scene.position);
     render();
 }
