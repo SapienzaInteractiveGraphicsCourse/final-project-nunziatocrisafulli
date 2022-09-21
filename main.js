@@ -6,7 +6,7 @@ var light, spotLight1, spotLight2;
 var ambient = true, lightSwitch = false;
 
 // objects var
-var startL, startL, street, finishL, bush1, bush2, tree1, tree2, streetL1, streetL2, car;
+var startL, startL, street, finishL, bush1, bush2, tree1, tree2, streetL1, streetL2, car, truck, tractor;
 var vehicles = [];
 
 
@@ -83,6 +83,12 @@ function createAmbient() {
 function spawnVehicles() {
    //car = new Car(0xee4b2b);
    //scene.add(car.centralBlock)
+
+   //truck = new Truck();
+   //scene.add(truck.frontBlock)
+
+   //tractor = new Tractor();
+   //scene.add(tractor.frontBlock)
 }
 
 function enableAnimations() {
@@ -114,7 +120,7 @@ function init() {
 
     camera.position.set(0, -200, 150); // x, y, z move along y to follow animal
     //camera.position.set(0, 0, 120);
-    //camera.position.set(0, -40, 50);
+    //camera.position.set(0, -40, 0);
     //camera.position.set(-40, 0, 0);
     camera.lookAt(scene.position);
     render();
