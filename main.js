@@ -6,12 +6,17 @@ var light, spotLight1, spotLight2;
 var ambient = true, lightSwitch = false;
 
 // objects var
-var startL, startL, street, finishL, bush1, bush2, tree1, tree2, streetL1, streetL2, car, truck, tractor, lightTargetLeft, lightTargetRight, vehicles, spawnPositions, vehiclesColors;
+var startL, startL, street, finishL, bush1, bush2, tree1, tree2, streetL1, streetL2, car, truck, tractor, lightTargetLeft, lightTargetRight, vehicles, spawnPositions, vehiclesColors, tweens;
 
-function vehiclesAnimation() {
+function enableAnimations() {
+    tweens = [];
     for (let i = 0; i < vehicles.length; i++) {
-        var velocity = Math.floor(Math.random() * 2);
-        vehicles[i].startAnimation(velocity);
+        var time = Math.floor(1000+Math.random()*3000)
+        if (vehicles[i].type == 0) {
+            tweens.push(new TWEEN.Tween(vehicles[i].centralBlock.position).to({x: -vehicles[i].posX}, time).start().repeat(Infinity));
+        } else {
+            tweens.push(new TWEEN.Tween(vehicles[i].frontBlock.position).to({x: -vehicles[i].posX}, time).start().repeat(Infinity));
+        }
     }
 }
 
@@ -49,9 +54,11 @@ function refreshLight() {
     }
 
     if (ambient == true) {
+        renderer.setClearColor(0x87ceeb);
         light = new THREE.AmbientLight(0xffffff, 1.2);
         scene.add( light );
     } else {
+        renderer.setClearColor(0x2e4482);
         light = new THREE.AmbientLight(0xffffff, 0.5 );
         scene.add( light );
 
@@ -101,7 +108,7 @@ function createAmbient() {
 
 function spawnVehicles() {
     vehicles = [];
-    spawnPositions = [[-60, -37.5], [-60, -12.5], [60, 12.5], [60,37.5]]
+    spawnPositions = [[-110, -37.5], [-110, -12.5], [110, 12.5], [110,37.5]]
     vehiclesColors = [0xff5733, 0xffbb33, 0xc1f33, 0x33ff6e, 0x33ffec, 0x335eff, 0xce33ff, 0xff3171];
     for (let i = 0; i < spawnPositions.length; i++) {
         var color = vehiclesColors[Math.floor(Math.random() * vehiclesColors.length)]
@@ -125,10 +132,6 @@ function spawnVehicles() {
     }
 }
 
-function enableAnimations() {
-    TODO
-}
-
 function runGame() {
     TODO
 }
@@ -139,10 +142,10 @@ function init() {
   
     scene = new THREE.Scene();
     
-    camera = new THREE.PerspectiveCamera(45, width / height, 0.1, 1000);
+    camera = new THREE.PerspectiveCamera(60, width / height, 0.1, 1000);
     renderer = new THREE.WebGLRenderer();
 
-    renderer.setClearColor(0xffffff);
+    
 	renderer.setSize(width, height);
     document.body.appendChild(renderer.domElement);
 
@@ -150,13 +153,10 @@ function init() {
     createAmbient();
     spawnVehicles();
     refreshLight();
-    //enableAnimations();
+    enableAnimations();
     //runGame();
 
-    camera.position.set(0, -200, 150);
-    //camera.position.set(0, 0, 120);
-    //camera.position.set(0, -40, 0);
-    //camera.position.set(-40, 0, 0);
+    camera.position.set(0, -90, 150);
     camera.lookAt(scene.position);
     render();
 }
@@ -165,8 +165,8 @@ function render() {
     if (lightSwitch) {
         refreshLight();
     }
-    //vehiclesAnimation();
     requestAnimationFrame( render );
+    TWEEN.update()
     renderer.render(scene, camera);    
 }
 

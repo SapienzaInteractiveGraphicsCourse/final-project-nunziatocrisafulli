@@ -1,11 +1,12 @@
 class startLawn {
     constructor() {
-        this.lawnGeometry = new THREE.BoxBufferGeometry(120, 24, 1 );
+        this.lawnGeometry = new THREE.BoxBufferGeometry(360, 45, 1 );
         this.texture = new THREE.TextureLoader().load('texture/lawn.jpg');
+        this.texture.repeat.set(1, 1);
         this.texture.anisotropy = renderer.capabilities.getMaxAnisotropy();
         this.material = new THREE.MeshPhongMaterial({ map: this.texture });
         this.lawn = new THREE.Mesh(this.lawnGeometry, this.material);
-        this.lawn.position.set(0,-54,0);
+        this.lawn.position.set(0,-65,0);
         scene.add(this.lawn);
     }    
 }
@@ -67,8 +68,9 @@ class streetLamp {
 
 class Street {
     constructor() {
-        this.streetGeometry = new THREE.BoxBufferGeometry(120, 100, 1 );
+        this.streetGeometry = new THREE.BoxBufferGeometry(360, 100, 1 );
         this.texture = new THREE.TextureLoader().load('texture/street.jpg');
+        this.texture.repeat.set(1, 1);
         this.texture.anisotropy = renderer.capabilities.getMaxAnisotropy();
         this.streetMaterial = new THREE.MeshPhongMaterial( { map: this.texture } );
         this.street = new THREE.Mesh(this.streetGeometry, this.streetMaterial);
@@ -80,12 +82,13 @@ class Street {
 
 class finishLawn {
     constructor() {
-        this.finishLawnGeometry = new THREE.BoxBufferGeometry(120, 24, 1 );
+        this.finishLawnGeometry = new THREE.BoxBufferGeometry(360, 60, 1 );
         this.texture = new THREE.TextureLoader().load('texture/lawn.jpg');
+        this.texture.repeat.set(1, 1);
         this.texture.anisotropy = renderer.capabilities.getMaxAnisotropy();
         this.finishLawnMaterial = new THREE.MeshPhongMaterial( { map: this.texture } );
         this.finishLawn = new THREE.Mesh(this.finishLawnGeometry, this.finishLawnMaterial);
-        this.finishLawn.position.set(0,62,0);
+        this.finishLawn.position.set(0,81,0);
         scene.add(this.finishLawn);
     }    
 }

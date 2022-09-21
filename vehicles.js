@@ -1,5 +1,6 @@
 class Car {
     constructor(posX, posY, col, headTarget, tailTarget) {
+        this.type = 0;
         this.posX = posX;
         // central block
         this.carTexture = new THREE.TextureLoader().load('texture/car.jpg');
@@ -146,17 +147,20 @@ class Car {
     
     startAnimation(velocity) {
         if (this.posX < 0) {
-            this.centralBlock.position.x+=velocity
-            if (this.centralBlock.position.x > 60) this.centralBlock.position.x = this.posX
+            //this.centralBlock.position.x+=velocity
+            //if (this.centralBlock.position.x > 60) this.centralBlock.position.x = this.posX
+            var tween = new TWEEN.Tween(this.centralBlock.position).to({x: 60}, 100).start();
         } else {
-            this.centralBlock.position.x-=velocity
-            if (this.centralBlock.position.x < -60) this.centralBlock.position.x = this.posX
+            //this.centralBlock.position.x-=velocity
+            //if (this.centralBlock.position.x < -60) this.centralBlock.position.x = this.posX
+            var tween = new TWEEN.Tween(this.centralBlock.position).to({x: -60}, 100).start();
         }
     }
 }
 
 class Truck {
     constructor(posX, posY, col, headTarget, tailTarget) {
+        this.type = 1;
         this.posX = posX;
         this.truckTexture = new THREE.TextureLoader().load('texture/car.jpg');
         this.truckTexture.anisotropy = renderer.capabilities.getMaxAnisotropy();
@@ -307,6 +311,7 @@ class Truck {
 
 class Tractor {
     constructor(posX, posY, col, headTarget, tailTarget) {
+        this.type = 2;
         this.posX = posX;
         this.tractorTexture = new THREE.TextureLoader().load('texture/car.jpg');
         this.tractorTexture.anisotropy = renderer.capabilities.getMaxAnisotropy();
