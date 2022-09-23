@@ -6,20 +6,21 @@ var light, spotLight1, spotLight2;
 var ambient = true, lightSwitch = false;
 
 // objects var
-var startL, startL, street, finishL, bush1, bush2, tree1, tree2, streetL1, streetL2, car, truck, tractor, lightTargetLeft, lightTargetRight, vehicles, spawnPositions, vehiclesColors, tweens, rabbit, backHipLeft, backHipLeftR, backHipRight, backHipRightR, frontHipLeft, frontHipLeftR, frontHipRight, frontHipRightR;
+var startL, startL, street, finishL, bush1, bush2, tree1, tree2, streetL1, streetL2, car, truck, tractor, lightTargetLeft, lightTargetRight, vehicles, spawnPositions, vehiclesColors, rabbit, backHipLeft, backHipLeftR, backHipRight, backHipRightR, frontHipLeft, frontHipLeftR, frontHipRight, frontHipRightR;
 
 // animations var
-var firstJump = true;
+var firstJump;
 var win = false;
+var crash = false;
+var crashFunction;
 
 function enableAnimations() {
-    tweens = [];
     for (let i = 0; i < vehicles.length; i++) {
         var time = Math.floor(1000+Math.random()*2500)
         if (vehicles[i].type == 0) {
-            tweens.push(new TWEEN.Tween(vehicles[i].centralBlock.position).to({x: -vehicles[i].posX}, time).start().repeat(Infinity));
+            new TWEEN.Tween(vehicles[i].centralBlock.position).to({x: -vehicles[i].posX}, time).start().repeat(Infinity);
         } else {
-            tweens.push(new TWEEN.Tween(vehicles[i].frontBlock.position).to({x: -vehicles[i].posX}, time).start().repeat(Infinity));
+            new TWEEN.Tween(vehicles[i].frontBlock.position).to({x: -vehicles[i].posX}, time).start().repeat(Infinity);
         }
     }
 }
@@ -140,11 +141,18 @@ function rabbitPosition() {
     rabbit.rotation.x = THREE.Math.degToRad( 90 );
     rabbit.rotation.y = THREE.Math.degToRad( 180 );
     rabbit.position.set(0,-62,0.3);
+    console.log(rabbit.position)
     rabbit.scale.set(0.5,0.5,0.5);
     if (win) {
         alert("YOU WIN! CONGRATULATION!");
         win = false;
     }
+    if (crash) {
+        alert("CRASH!");
+        crash = false;
+    }
+    firstJump = true;
+    crashFunction = setInterval(checkCrash, 1);
 }
 
 function loadRabbitModel() {
@@ -157,16 +165,18 @@ function loadRabbitModel() {
         backHipRight = rabbit.children[0].children[0].children[0].children[0].children[0].children[0].children[0].children[0].children[0];
         backHipLeftR = rabbit.children[0].children[0].children[0].children[0].children[0].children[0].children[0].children[0].children[3].rotation.z;
         backHipRightR = rabbit.children[0].children[0].children[0].children[0].children[0].children[0].children[0].children[0].children[0].rotation.z;
+        backHipLeftRY = rabbit.children[0].children[0].children[0].children[0].children[0].children[0].children[0].children[0].children[3].rotation.y;
+        backHipRightRY = rabbit.children[0].children[0].children[0].children[0].children[0].children[0].children[0].children[0].children[0].rotation.y;
 
         // pointer to front hip
         frontHipLeft = rabbit.children[0].children[0].children[0].children[0].children[0].children[0].children[0].children[0].children[2].children[0].children[0].children[2].children[0]
         frontHipRight = rabbit.children[0].children[0].children[0].children[0].children[0].children[0].children[0].children[0].children[2].children[0].children[0].children[0].children[0]
         frontHipLeftR = rabbit.children[0].children[0].children[0].children[0].children[0].children[0].children[0].children[0].children[2].children[0].children[0].children[2].children[0].rotation.z
         frontHipRightR = rabbit.children[0].children[0].children[0].children[0].children[0].children[0].children[0].children[0].children[2].children[0].children[0].children[0].children[0].rotation.z
+        frontHipLeftRY = rabbit.children[0].children[0].children[0].children[0].children[0].children[0].children[0].children[0].children[2].children[0].children[0].children[2].children[0].rotation.y
+        frontHipRightRY = rabbit.children[0].children[0].children[0].children[0].children[0].children[0].children[0].children[0].children[2].children[0].children[0].children[0].children[0].rotation.y
 
 	    scene.add( rabbit );
-        console.log(frontHipLeftR)
-        console.log(frontHipLeftR)
         rabbitPosition();
     }, undefined, function ( error ) {
 	    console.error( error );
@@ -272,10 +282,6 @@ function initAnimationListeners() {
     }, {once: true});
 }
 
-function runGame() {
-    TODO
-}
-
 function init() {
     width = 768,
     height = 768;
@@ -301,20 +307,62 @@ function init() {
     camera.lookAt(scene.position);
     render();
 }
+function crashAnimation() {
+   
+    var t0 = new TWEEN.Tween(backHipLeft.rotation).to({y: THREE.Math.degToRad( 90 )}, 200).onStart(function() {
+        new TWEEN.Tween(backHipRight.rotation).to({y: THREE.Math.degToRad( -60 )}, 200).onStart(function() {
+            new TWEEN.Tween(frontHipLeft.rotation).to({y: THREE.Math.degToRad( 60 )}, 200).onStart(function() {
+                new TWEEN.Tween(frontHipRight.rotation).to({y: THREE.Math.degToRad( 60 )}, 200).onStart(function() {
+                    new TWEEN.Tween(rabbit.position).to({ z: rabbit.position.z+50}, 500).easing(TWEEN.Easing.Exponential.Out).start();
+                }).start()
+            }).start();
+        }).start();
+    });
 
-/*function checkCrash() {
+    var t1 = new TWEEN.Tween(rabbit.position).to({ z: rabbit.position.z}, 500).easing(TWEEN.Easing.Exponential.In).onStart(function() {
+        new TWEEN.Tween(backHipLeft.rotation).to({y: backHipLeftRY}, 200).onStart(function() {
+            new TWEEN.Tween(backHipRight.rotation).to({y: backHipRightRY}, 200).onStart(function() {
+                new TWEEN.Tween(frontHipLeft.rotation).to({y: frontHipLeftRY}, 200).onStart(function() {
+                    new TWEEN.Tween(frontHipRight.rotation).to({y: frontHipRightRY}, 200).start()
+                }).start();
+            }).start();
+        }).start();
+    }).onComplete(rabbitPosition);
+    
+    t0.chain(t1).start();
+}
+
+function checkCrash() {
     if (rabbit != null) {
-        var rabbitPos = rabbit.getWorldPosition();
-        
+        var rabbitPosX = rabbit.position.x;
+        var rabbitPosY = rabbit.position.y;
+        var rabbitPosZ = rabbit.position.z;
+        for (let i = 0; i < vehicles.length; i++) {
+            var vehicle = vehicles[i];
+            var vehicleType = vehicle.type
+            if (vehicleType == 0) {
+                var vehiclePosX = vehicle.centralBlock.position.x
+                var vehiclePosY = vehicle.centralBlock.position.y
+                var vehiclePosZ = vehicle.centralBlock.position.z
+                if (Math.abs(rabbitPosX-vehiclePosX) < 19.5) {
+                    if (Math.abs(rabbitPosY-vehiclePosY) < 6.5) {
+                        if (Math.abs(rabbitPosZ-vehiclePosZ) < 6.5) {
+                            crash = true;
+                            clearInterval(crashFunction);
+                            crashAnimation();
+                        }
+                    }
+                }
+                    
+            }
+        }
     }
-}*/
+}
 
 function render() {
-    if (lightSwitch) {
-        refreshLight();
-    }
+    if (lightSwitch) refreshLight();
     requestAnimationFrame( render );
-    TWEEN.update()
+    TWEEN.update() 
     renderer.render(scene, camera);    
 }
 
