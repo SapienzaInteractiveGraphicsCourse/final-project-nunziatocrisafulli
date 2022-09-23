@@ -97,7 +97,7 @@ class Car {
         this.headLight1 = new THREE.SpotLight( 0xffffff, 0.0 );
         this.headLight1.penumbra = 0.05;
         this.headLight1.decay = 1;
-        this.headLight1.distance = 500;
+        this.headLight1.distance = 25;
         this.headLight1.shadow.mapSize.width = 1024;
         this.headLight1.shadow.mapSize.height = 1024;
         this.headLight1.shadow.camera.near = 10;
@@ -108,7 +108,7 @@ class Car {
         this.headLight2 = new THREE.SpotLight( 0xffffff, 0.0 );
         this.headLight2.penumbra = 0.05;
         this.headLight2.decay = 1;
-        this.headLight2.distance = 500;
+        this.headLight2.distance = 25;
         this.headLight2.shadow.mapSize.width = 1024;
         this.headLight2.shadow.mapSize.height = 1024;
         this.headLight2.shadow.camera.near = 10;
@@ -122,7 +122,7 @@ class Car {
         this.tailLight1 = new THREE.SpotLight( 0xff0000, 0.0 );
         this.tailLight1.penumbra = 0.05;
         this.tailLight1.decay = 1;
-        this.tailLight1.distance = 500;
+        this.tailLight1.distance = 15;
         this.tailLight1.shadow.mapSize.width = 1024;
         this.tailLight1.shadow.mapSize.height = 1024;
         this.tailLight1.shadow.camera.near = 10;
@@ -133,7 +133,7 @@ class Car {
         this.tailLight2 = new THREE.SpotLight( 0xff0000, 0.0 );
         this.tailLight2.penumbra = 0.05;
         this.tailLight2.decay = 1;
-        this.tailLight2.distance = 500;
+        this.tailLight2.distance = 15;
         this.tailLight2.shadow.mapSize.width = 1024;
         this.tailLight2.shadow.mapSize.height = 1024;
         this.tailLight2.shadow.camera.near = 10;
@@ -250,7 +250,7 @@ class Truck {
         this.headLight1 = new THREE.SpotLight( 0xffffff, 0.0 );
         this.headLight1.penumbra = 0.05;
         this.headLight1.decay = 1;
-        this.headLight1.distance = 500;
+        this.headLight1.distance = 25;
         this.headLight1.shadow.mapSize.width = 1024;
         this.headLight1.shadow.mapSize.height = 1024;
         this.headLight1.shadow.camera.near = 10;
@@ -261,7 +261,7 @@ class Truck {
         this.headLight2 = new THREE.SpotLight( 0xffffff, 0.0 );
         this.headLight2.penumbra = 0.05;
         this.headLight2.decay = 1;
-        this.headLight2.distance = 500;
+        this.headLight2.distance = 25;
         this.headLight2.shadow.mapSize.width = 1024;
         this.headLight2.shadow.mapSize.height = 1024;
         this.headLight2.shadow.camera.near = 10;
@@ -275,7 +275,7 @@ class Truck {
         this.tailLight1 = new THREE.SpotLight( 0xff0000, 0.0 );
         this.tailLight1.penumbra = 0.05;
         this.tailLight1.decay = 1;
-        this.tailLight1.distance = 500;
+        this.tailLight1.distance = 15;
         this.tailLight1.shadow.mapSize.width = 1024;
         this.tailLight1.shadow.mapSize.height = 1024;
         this.tailLight1.shadow.camera.near = 10;
@@ -286,7 +286,7 @@ class Truck {
         this.tailLight2 = new THREE.SpotLight( 0xff0000, 0.0 );
         this.tailLight2.penumbra = 0.05;
         this.tailLight2.decay = 1;
-        this.tailLight2.distance = 500;
+        this.tailLight2.distance = 15;
         this.tailLight2.shadow.mapSize.width = 1024;
         this.tailLight2.shadow.mapSize.height = 1024;
         this.tailLight2.shadow.camera.near = 10;
@@ -404,7 +404,7 @@ class Tractor {
         this.headLight1 = new THREE.SpotLight( 0xffffff, 0.0 );
         this.headLight1.penumbra = 0.05;
         this.headLight1.decay = 1;
-        this.headLight1.distance = 500;
+        this.headLight1.distance = 25;
         this.headLight1.shadow.mapSize.width = 1024;
         this.headLight1.shadow.mapSize.height = 1024;
         this.headLight1.shadow.camera.near = 10;
@@ -415,7 +415,7 @@ class Tractor {
         this.headLight2 = new THREE.SpotLight( 0xffffff, 0.0 );
         this.headLight2.penumbra = 0.05;
         this.headLight2.decay = 1;
-        this.headLight2.distance = 500;
+        this.headLight2.distance = 25;
         this.headLight2.shadow.mapSize.width = 1024;
         this.headLight2.shadow.mapSize.height = 1024;
         this.headLight2.shadow.camera.near = 10;
@@ -429,7 +429,7 @@ class Tractor {
         this.tailLight1 = new THREE.SpotLight( 0xff0000, 0.0 );
         this.tailLight1.penumbra = 0.05;
         this.tailLight1.decay = 1;
-        this.tailLight1.distance = 500;
+        this.tailLight1.distance = 15;
         this.tailLight1.shadow.mapSize.width = 1024;
         this.tailLight1.shadow.mapSize.height = 1024;
         this.tailLight1.shadow.camera.near = 10;
@@ -440,7 +440,7 @@ class Tractor {
         this.tailLight2 = new THREE.SpotLight( 0xff0000, 0.0 );
         this.tailLight2.penumbra = 0.05;
         this.tailLight2.decay = 1;
-        this.tailLight2.distance = 500;
+        this.tailLight2.distance = 15;
         this.tailLight2.shadow.mapSize.width = 1024;
         this.tailLight2.shadow.mapSize.height = 1024;
         this.tailLight2.shadow.camera.near = 10;

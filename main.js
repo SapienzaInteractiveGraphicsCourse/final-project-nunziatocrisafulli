@@ -1,4 +1,4 @@
-// global var
+    // global var
 var scene, renderer;
 
 // light var
@@ -6,7 +6,7 @@ var light, spotLight1, spotLight2;
 var ambient = true, lightSwitch = false;
 
 // objects var
-var startL, startL, street, finishL, bush1, bush2, tree1, tree2, streetL1, streetL2, car, truck, tractor, lightTargetLeft, lightTargetRight, vehicles, spawnPositions, vehiclesColors, tweens;
+var startL, startL, street, finishL, bush1, bush2, tree1, tree2, streetL1, streetL2, car, truck, tractor, lightTargetLeft, lightTargetRight, vehicles, spawnPositions, vehiclesColors, tweens, rabbit;
 
 function enableAnimations() {
     tweens = [];
@@ -132,6 +132,61 @@ function spawnVehicles() {
     }
 }
 
+function rabbitPosition() {
+    rabbit.rotation.x = THREE.Math.degToRad( 90 );
+    rabbit.rotation.y = THREE.Math.degToRad( 180 );
+    rabbit.position.set(0,-60,0.3);
+    rabbit.scale.set(0.5,0.5,0.5);
+}
+
+function loadRabbitModel() {
+    const loader = new THREE.GLTFLoader();
+    loader.load( './rabbit/scene.gltf', function ( gltf ) {
+        rabbit = gltf.scene;
+	    scene.add( rabbit );
+        rabbitPosition();
+    }, undefined, function ( error ) {
+	    console.error( error );
+    } );
+}
+
+function jumpForward() {
+    var t1 = new TWEEN.Tween(rabbit.position).to({y: rabbit.position.y+12.5, z: rabbit.position.z+25}, 200);
+    var t2 = new TWEEN.Tween(rabbit.position).to({y: rabbit.position.y+12.5, z: rabbit.position.z}, 200).onComplete(initAnimationListeners);
+    t1.chain(t2).start();
+    console.log("w");
+}
+
+function jumpBack() {
+    var t1 = new TWEEN.Tween(rabbit.position).to({y: rabbit.position.y-12.5, z: rabbit.position.z+25}, 200);
+    var t2 = new TWEEN.Tween(rabbit.position).to({y: rabbit.position.y-12.5, z: rabbit.position.z}, 200).onComplete(initAnimationListeners);
+    t1.chain(t2).start();
+    console.log("s");
+}
+
+function jumpRight() {
+    var t1 = new TWEEN.Tween(rabbit.position).to({x: rabbit.position.x+12.5, z: rabbit.position.z+25}, 200);
+    var t2 = new TWEEN.Tween(rabbit.position).to({x: rabbit.position.x+12.5, z: rabbit.position.z}, 200).onComplete(initAnimationListeners);
+    t1.chain(t2).start();
+    console.log("d");
+}
+
+function jumpLeft() {
+    var t1 = new TWEEN.Tween(rabbit.position).to({x: rabbit.position.x-12.5, z: rabbit.position.z+25}, 200);
+    var t2 = new TWEEN.Tween(rabbit.position).to({x: rabbit.position.x-12.5, z: rabbit.position.z}, 20cd G  0).onComplete(initAnimationListeners);
+    t1.chain(t2).start();
+    console.log("a");
+}
+
+function initAnimationListeners() {
+    document.addEventListener('keypress', (event) => {
+        if (event.code == "KeyW") jumpForward();
+        else if (event.code == "KeyS") jumpBack();
+        else if (event.code == "KeyD") jumpRight();
+        else if (event.code == "KeyA") jumpLeft();
+    }, {once: true});
+}
+
 function runGame() {
     TODO
 }
@@ -154,6 +209,8 @@ function init() {
     spawnVehicles();
     refreshLight();
     enableAnimations();
+    loadRabbitModel();
+    initAnimationListeners();
     //runGame();
 
     camera.position.set(0, -90, 150);
