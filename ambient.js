@@ -6,6 +6,7 @@ class startLawn {
         this.texture.anisotropy = renderer.capabilities.getMaxAnisotropy();
         this.material = new THREE.MeshPhongMaterial({ map: this.texture });
         this.lawn = new THREE.Mesh(this.lawnGeometry, this.material);
+        this.lawn.receiveShadow = true;
         this.lawn.position.set(0,-65,0);
         scene.add(this.lawn);
     }    
@@ -19,6 +20,7 @@ class Bush {
         this.bushMaterial = new THREE.MeshPhongMaterial({ map: this.texture});
         this.bush = new THREE.Mesh(this.bushGeometry, this.bushMaterial);
         this.bush.position.set(posX, posY, posZ);
+        this.bush.receiveShadow = true;
         scene.add(this.bush)
     }
 }
@@ -35,7 +37,7 @@ class Tree { // trunk + bush
         this.group.add(this.trunk)
         this.bush = new Bush(posX, 62, 31);
         this.bush.bush.scale.set(0.8, 0.8, 0.8)
-        this.group.add(this.bush);
+        this.group.add(this.bush.bush);
         scene.add(this.group)
     }
 }

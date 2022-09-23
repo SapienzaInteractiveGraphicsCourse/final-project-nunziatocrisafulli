@@ -6,12 +6,16 @@ var light, spotLight1, spotLight2;
 var ambient = true, lightSwitch = false;
 
 // objects var
-var startL, startL, street, finishL, bush1, bush2, tree1, tree2, streetL1, streetL2, car, truck, tractor, lightTargetLeft, lightTargetRight, vehicles, spawnPositions, vehiclesColors, tweens, rabbit;
+var startL, startL, street, finishL, bush1, bush2, tree1, tree2, streetL1, streetL2, car, truck, tractor, lightTargetLeft, lightTargetRight, vehicles, spawnPositions, vehiclesColors, tweens, rabbit, backHipLeft, backHipLeftR, backHipRight, backHipRightR, frontHipLeft, frontHipLeftR, frontHipRight, frontHipRightR;
+
+// animations var
+var firstJump = true;
+var win = false;
 
 function enableAnimations() {
     tweens = [];
     for (let i = 0; i < vehicles.length; i++) {
-        var time = Math.floor(1000+Math.random()*3000)
+        var time = Math.floor(1000+Math.random()*2500)
         if (vehicles[i].type == 0) {
             tweens.push(new TWEEN.Tween(vehicles[i].centralBlock.position).to({x: -vehicles[i].posX}, time).start().repeat(Infinity));
         } else {
@@ -108,10 +112,10 @@ function createAmbient() {
 
 function spawnVehicles() {
     vehicles = [];
-    spawnPositions = [[-110, -37.5], [-110, -12.5], [110, 12.5], [110,37.5]]
+    spawnPositions = [[-130, -37.5], [-130, -12.5], [130, 12.5], [130,37.5]]
     vehiclesColors = [0xff5733, 0xffbb33, 0xc1f33, 0x33ff6e, 0x33ffec, 0x335eff, 0xce33ff, 0xff3171];
     for (let i = 0; i < spawnPositions.length; i++) {
-        var color = vehiclesColors[Math.floor(Math.random() * vehiclesColors.length)]
+        var color = vehiclesColors[Math.floor(Math.random() * vehiclesColors.length+1)]
         var vehicleIndex = Math.floor(Math.random() * 3);
         if (vehicleIndex == 0) {
             if (spawnPositions[i][0] < 0) var vehicle = new Car(spawnPositions[i][0], spawnPositions[i][1], color, lightTargetRight, lightTargetLeft);
@@ -135,55 +139,136 @@ function spawnVehicles() {
 function rabbitPosition() {
     rabbit.rotation.x = THREE.Math.degToRad( 90 );
     rabbit.rotation.y = THREE.Math.degToRad( 180 );
-    rabbit.position.set(0,-60,0.3);
+    rabbit.position.set(0,-62,0.3);
     rabbit.scale.set(0.5,0.5,0.5);
+    if (win) {
+        alert("YOU WIN! CONGRATULATION!");
+        win = false;
+    }
 }
 
 function loadRabbitModel() {
     const loader = new THREE.GLTFLoader();
     loader.load( './rabbit/scene.gltf', function ( gltf ) {
         rabbit = gltf.scene;
+        
+        // pointer to back hips
+        backHipLeft = rabbit.children[0].children[0].children[0].children[0].children[0].children[0].children[0].children[0].children[3];
+        backHipRight = rabbit.children[0].children[0].children[0].children[0].children[0].children[0].children[0].children[0].children[0];
+        backHipLeftR = rabbit.children[0].children[0].children[0].children[0].children[0].children[0].children[0].children[0].children[3].rotation.z;
+        backHipRightR = rabbit.children[0].children[0].children[0].children[0].children[0].children[0].children[0].children[0].children[0].rotation.z;
+
+        // pointer to front hip
+        frontHipLeft = rabbit.children[0].children[0].children[0].children[0].children[0].children[0].children[0].children[0].children[2].children[0].children[0].children[2].children[0]
+        frontHipRight = rabbit.children[0].children[0].children[0].children[0].children[0].children[0].children[0].children[0].children[2].children[0].children[0].children[0].children[0]
+        frontHipLeftR = rabbit.children[0].children[0].children[0].children[0].children[0].children[0].children[0].children[0].children[2].children[0].children[0].children[2].children[0].rotation.z
+        frontHipRightR = rabbit.children[0].children[0].children[0].children[0].children[0].children[0].children[0].children[0].children[2].children[0].children[0].children[0].children[0].rotation.z
+
 	    scene.add( rabbit );
+        console.log(frontHipLeftR)
+        console.log(frontHipLeftR)
         rabbitPosition();
     }, undefined, function ( error ) {
 	    console.error( error );
     } );
+    
 }
 
-function jumpForward() {
-    var t1 = new TWEEN.Tween(rabbit.position).to({y: rabbit.position.y+12.5, z: rabbit.position.z+25}, 200);
-    var t2 = new TWEEN.Tween(rabbit.position).to({y: rabbit.position.y+12.5, z: rabbit.position.z}, 200).onComplete(initAnimationListeners);
-    t1.chain(t2).start();
-    console.log("w");
+function jumpForward(offset) {
+    var t0 = new TWEEN.Tween(rabbit.rotation).to({y: THREE.Math.degToRad( 180 )}, 100);
+    
+    var t2 = new TWEEN.Tween(backHipLeft.rotation).to({z: THREE.Math.degToRad( 30 )}, 200).onStart(function() {
+        new TWEEN.Tween(backHipRight.rotation).to({z: THREE.Math.degToRad( -120 )}, 200).onStart(function() {
+            new TWEEN.Tween(frontHipLeft.rotation).to({z: THREE.Math.degToRad( 120 )}, 200).onStart(function() {
+                new TWEEN.Tween(frontHipRight.rotation).to({z: THREE.Math.degToRad( 120 )}, 200).onStart(function() {
+                    new TWEEN.Tween(rabbit.position).to({y: rabbit.position.y+offset, z: rabbit.position.z+20}, 400).easing(TWEEN.Easing.Exponential.Out).start();
+                }).start()
+            }).start();
+        }).start();
+    });
+
+    var t6 = new TWEEN.Tween(rabbit.position).to({y: rabbit.position.y+offset+7, z: rabbit.position.z}, 400).easing(TWEEN.Easing.Exponential.In).onStart(function() {
+        new TWEEN.Tween(backHipLeft.rotation).to({z: backHipLeftR}, 200).onStart(function() {
+            new TWEEN.Tween(backHipRight.rotation).to({z: backHipRightR}, 200).onStart(function() {
+                new TWEEN.Tween(frontHipLeft.rotation).to({z: frontHipLeftR}, 200).onStart(function() {
+                    new TWEEN.Tween(frontHipRight.rotation).to({z: frontHipRightR}, 200).start()
+                }).start();
+            }).start();
+        }).start();
+    }).onComplete(initAnimationListeners);
+    
+    t0.chain(t2.chain(t6)).start();
 }
 
-function jumpBack() {
-    var t1 = new TWEEN.Tween(rabbit.position).to({y: rabbit.position.y-12.5, z: rabbit.position.z+25}, 200);
-    var t2 = new TWEEN.Tween(rabbit.position).to({y: rabbit.position.y-12.5, z: rabbit.position.z}, 200).onComplete(initAnimationListeners);
-    t1.chain(t2).start();
-    console.log("s");
+function jumpRight(offset) {
+    var t0 = new TWEEN.Tween(rabbit.rotation).to({y: THREE.Math.degToRad( 90 )}, 100);
+    
+    var t2 = new TWEEN.Tween(backHipLeft.rotation).to({z: THREE.Math.degToRad( 30 )}, 200).onStart(function() {
+        new TWEEN.Tween(backHipRight.rotation).to({z: THREE.Math.degToRad( -120 )}, 200).onStart(function() {
+            new TWEEN.Tween(frontHipLeft.rotation).to({z: THREE.Math.degToRad( 120 )}, 200).onStart(function() {
+                new TWEEN.Tween(frontHipRight.rotation).to({z: THREE.Math.degToRad( 120 )}, 200).onStart(function() {
+                    new TWEEN.Tween(rabbit.position).to({x: rabbit.position.x+offset, z: rabbit.position.z+20}, 400).easing(TWEEN.Easing.Exponential.Out).start();
+                }).start()
+            }).start();
+        }).start();
+    });
+
+    var t6 = new TWEEN.Tween(rabbit.position).to({x: rabbit.position.x+offset+7, z: rabbit.position.z}, 400).easing(TWEEN.Easing.Exponential.In).onStart(function() {
+        new TWEEN.Tween(backHipLeft.rotation).to({z: backHipLeftR}, 200).onStart(function() {
+            new TWEEN.Tween(backHipRight.rotation).to({z: backHipRightR}, 200).onStart(function() {
+                new TWEEN.Tween(frontHipLeft.rotation).to({z: frontHipLeftR}, 200).onStart(function() {
+                    new TWEEN.Tween(frontHipRight.rotation).to({z: frontHipRightR}, 200).start()
+                }).start();
+            }).start();
+        }).start();
+    }).onComplete(initAnimationListeners);
+    
+    t0.chain(t2.chain(t6)).start();
 }
 
-function jumpRight() {
-    var t1 = new TWEEN.Tween(rabbit.position).to({x: rabbit.position.x+12.5, z: rabbit.position.z+25}, 200);
-    var t2 = new TWEEN.Tween(rabbit.position).to({x: rabbit.position.x+12.5, z: rabbit.position.z}, 200).onComplete(initAnimationListeners);
-    t1.chain(t2).start();
-    console.log("d");
+function jumpLeft(offset) {
+    var t0 = new TWEEN.Tween(rabbit.rotation).to({y: THREE.Math.degToRad( 270 )}, 100);
+    
+    var t2 = new TWEEN.Tween(backHipLeft.rotation).to({z: THREE.Math.degToRad( 30 )}, 200).onStart(function() {
+        new TWEEN.Tween(backHipRight.rotation).to({z: THREE.Math.degToRad( -120 )}, 200).onStart(function() {
+            new TWEEN.Tween(frontHipLeft.rotation).to({z: THREE.Math.degToRad( 120 )}, 200).onStart(function() {
+                new TWEEN.Tween(frontHipRight.rotation).to({z: THREE.Math.degToRad( 120 )}, 200).onStart(function() {
+                    new TWEEN.Tween(rabbit.position).to({x: rabbit.position.x-offset, z: rabbit.position.z+20}, 400).easing(TWEEN.Easing.Exponential.Out).start();
+                }).start()
+            }).start();
+        }).start();
+    });
+
+
+    var t6 = new TWEEN.Tween(rabbit.position).to({x: rabbit.position.x-offset-7, z: rabbit.position.z}, 400).easing(TWEEN.Easing.Exponential.In).onStart(function() {
+        new TWEEN.Tween(backHipLeft.rotation).to({z: backHipLeftR}, 200).onStart(function() {
+            new TWEEN.Tween(backHipRight.rotation).to({z: backHipRightR}, 200).onStart(function() {
+                new TWEEN.Tween(frontHipLeft.rotation).to({z: frontHipLeftR}, 200).onStart(function() {
+                    new TWEEN.Tween(frontHipRight.rotation).to({z: frontHipRightR}, 200).start()
+                }).start();
+            }).start();
+        }).start();
+    }).onComplete(initAnimationListeners);
+    
+    t0.chain(t2.chain(t6)).start();
 }
 
-function jumpLeft() {
-    var t1 = new TWEEN.Tween(rabbit.position).to({x: rabbit.position.x-12.5, z: rabbit.position.z+25}, 200);
-    var t2 = new TWEEN.Tween(rabbit.position).to({x: rabbit.position.x-12.5, z: rabbit.position.z}, 20cd G  0).onComplete(initAnimationListeners);
-    t1.chain(t2).start();
-    console.log("a");
-}
 
 function initAnimationListeners() {
+    if (rabbit != null && rabbit.position.y > 60) {
+        win = true;
+        rabbitPosition();
+    }
     document.addEventListener('keypress', (event) => {
-        if (event.code == "KeyW") jumpForward();
-        else if (event.code == "KeyS") jumpBack();
-        else if (event.code == "KeyD") jumpRight();
-        else if (event.code == "KeyA") jumpLeft();
+        var offset = 20;
+        if (firstJump) {
+            offset -= 5;
+            firstJump = false;
+        }
+        if (event.code == "KeyW") jumpForward(offset);
+        else if (event.code == "KeyD") jumpRight(offset);
+        else if (event.code == "KeyA") jumpLeft(offset);
+        else initAnimationListeners ();
     }, {once: true});
 }
 
@@ -211,12 +296,18 @@ function init() {
     enableAnimations();
     loadRabbitModel();
     initAnimationListeners();
-    //runGame();
 
     camera.position.set(0, -90, 150);
     camera.lookAt(scene.position);
     render();
 }
+
+/*function checkCrash() {
+    if (rabbit != null) {
+        var rabbitPos = rabbit.getWorldPosition();
+        
+    }
+}*/
 
 function render() {
     if (lightSwitch) {
