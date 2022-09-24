@@ -116,7 +116,7 @@ function spawnVehicles() {
     spawnPositions = [[-130, -37.5], [-130, -12.5], [130, 12.5], [130,37.5]]
     vehiclesColors = [0xff5733, 0xffbb33, 0xc1f33, 0x33ff6e, 0x33ffec, 0x335eff, 0xce33ff, 0xff3171];
     for (let i = 0; i < spawnPositions.length; i++) {
-        var color = vehiclesColors[Math.floor(Math.random() * vehiclesColors.length+1)]
+        var color = vehiclesColors[Math.floor(Math.random() * vehiclesColors.length)]
         var vehicleIndex = Math.floor(Math.random() * 3);
         if (vehicleIndex == 0) {
             if (spawnPositions[i][0] < 0) var vehicle = new Car(spawnPositions[i][0], spawnPositions[i][1], color, lightTargetRight, lightTargetLeft);
@@ -142,19 +142,22 @@ function rabbitPosition() {
     rabbit.rotation.y = THREE.Math.degToRad( 180 );
     rabbit.position.set(0,-62,0.3);
     rabbit.scale.set(0.5,0.5,0.5);
-    if (win) {
-        alert("YOU WIN! CONGRATULATION!");
-        win = false;
-    }
-    if (crash) {
-        alert("CRASH!");
-        crash = false;
-    }
     firstJump = true;
     crashFunction = setInterval(checkCrash, 1);
 }
 
 function loadRabbitModel() {
+    if (win) {
+        alert("YOU WIN! CONGRATULATION!");
+        win = false;
+        scene.remove(rabbit);
+    }
+    if (crash) {
+        alert("CRASH!");
+        crash = false;
+        scene.remove(rabbit);
+    }
+
     const loader = new THREE.GLTFLoader();
     loader.load( './rabbit/scene.gltf', function ( gltf ) {
         rabbit = gltf.scene;
@@ -266,7 +269,7 @@ function jumpLeft(offset) {
 function initAnimationListeners() {
     if (rabbit != null && rabbit.position.y > 60) {
         win = true;
-        rabbitPosition();
+        restart();
     }
     document.addEventListener('keypress', (event) => {
         var offset = 20;
@@ -326,7 +329,7 @@ function crashAnimation() {
                 }).start();
             }).start();
         }).start();
-    }).onComplete(rabbitPosition);
+    }).onComplete(restart);
     
     t0.chain(t1).start();
 }
@@ -378,6 +381,17 @@ function checkCrash() {
             }
         }
     }
+}
+
+function restart() {
+    for (let i = 0; i < vehicles.length; i++) {
+        if (vehicles[i].type ==0) scene.remove(vehicles[i].centralBlock);
+        else scene.remove(vehicles[i].frontBlock)
+    }
+    TWEEN.removeAll();
+    spawnVehicles();
+    enableAnimations();
+    loadRabbitModel();
 }
 
 function render() {

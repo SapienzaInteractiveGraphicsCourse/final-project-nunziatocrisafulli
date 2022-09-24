@@ -17,7 +17,7 @@ class Bush {
         this.bushGeometry = new THREE.DodecahedronBufferGeometry(10,1);
         this.texture = new THREE.TextureLoader().load('texture/bush.jpg');
         this.texture.anisotropy = renderer.capabilities.getMaxAnisotropy();
-        this.bushMaterial = new THREE.MeshPhongMaterial({ map: this.texture});
+        this.bushMaterial = new THREE.MeshPhongMaterial({ map:this.texture});
         this.bush = new THREE.Mesh(this.bushGeometry, this.bushMaterial);
         this.bush.position.set(posX, posY, posZ);
         this.bush.receiveShadow = true;
@@ -31,7 +31,7 @@ class Tree { // trunk + bush
         this.trunkGeometry = new THREE.BoxBufferGeometry(2,2,32);
         this.texture = new THREE.TextureLoader().load('texture/trunk.jpg');
         this.texture.anisotropy = renderer.capabilities.getMaxAnisotropy();
-        this.trunkMaterial = new THREE.MeshPhongMaterial({ map: this.texture });
+        this.trunkMaterial = new THREE.MeshPhongMaterial({ map: this.texture});
         this.trunk = new THREE.Mesh(this.trunkGeometry, this.trunkMaterial);
         this.trunk.position.set(posX,62,16);
         this.group.add(this.trunk)
