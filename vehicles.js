@@ -144,18 +144,6 @@ class Car {
         this.leftBackLight.add(this.tailLight1);
         this.rightBackLight.add(this.tailLight2)
     }
-    
-    startAnimation(velocity) {
-        if (this.posX < 0) {
-            //this.centralBlock.position.x+=velocity
-            //if (this.centralBlock.position.x > 60) this.centralBlock.position.x = this.posX
-            var tween = new TWEEN.Tween(this.centralBlock.position).to({x: 60}, 100).start();
-        } else {
-            //this.centralBlock.position.x-=velocity
-            //if (this.centralBlock.position.x < -60) this.centralBlock.position.x = this.posX
-            var tween = new TWEEN.Tween(this.centralBlock.position).to({x: -60}, 100).start();
-        }
-    }
 }
 
 class Truck {
@@ -297,16 +285,6 @@ class Truck {
         this.leftBackLight.add(this.tailLight1);
         this.rightBackLight.add(this.tailLight2)
     }    
-
-    startAnimation(velocity) {
-        if (this.posX < 0) {
-            this.frontBlock.position.x+=velocity
-            if (this.frontBlock.position.x > 60) this.frontBlock.position.x = this.posX
-        } else {
-            this.frontBlock.position.x-=velocity
-            if (this.frontBlock.position.x < -60) this.frontBlock.position.x = this.posX
-        }
-    }
 }
 
 class Tractor {
@@ -450,15 +428,5 @@ class Tractor {
 
         this.leftBackLight.add(this.tailLight1);
         this.rightBackLight.add(this.tailLight2);
-    }
-    
-    startAnimation(velocity) {
-        if (this.posX < 0) {
-            this.frontBlock.position.x+=velocity
-            if (this.frontBlock.position.x > 60) this.frontBlock.position.x = this.posX
-        } else {
-            this.frontBlock.position.x-=velocity
-            if (this.frontBlock.position.x < -60) this.frontBlock.position.x = this.posX
-        }
     }
 }

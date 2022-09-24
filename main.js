@@ -141,7 +141,6 @@ function rabbitPosition() {
     rabbit.rotation.x = THREE.Math.degToRad( 90 );
     rabbit.rotation.y = THREE.Math.degToRad( 180 );
     rabbit.position.set(0,-62,0.3);
-    console.log(rabbit.position)
     rabbit.scale.set(0.5,0.5,0.5);
     if (win) {
         alert("YOU WIN! CONGRATULATION!");
@@ -340,20 +339,42 @@ function checkCrash() {
         for (let i = 0; i < vehicles.length; i++) {
             var vehicle = vehicles[i];
             var vehicleType = vehicle.type
+            var offsetX;
+            var offsetY;
+            var offsetZ;
+            var vehiclePosX;
+            var vehiclePosY;
+            var vehiclePosZ;
             if (vehicleType == 0) {
-                var vehiclePosX = vehicle.centralBlock.position.x
-                var vehiclePosY = vehicle.centralBlock.position.y
-                var vehiclePosZ = vehicle.centralBlock.position.z
-                if (Math.abs(rabbitPosX-vehiclePosX) < 19.5) {
-                    if (Math.abs(rabbitPosY-vehiclePosY) < 6.5) {
-                        if (Math.abs(rabbitPosZ-vehiclePosZ) < 6.5) {
-                            crash = true;
-                            clearInterval(crashFunction);
-                            crashAnimation();
-                        }
+                offsetX = 19.5;
+                offsetY = 6.5;
+                offsetZ = 6.5;
+                vehiclePosX = vehicle.centralBlock.position.x
+                vehiclePosY = vehicle.centralBlock.position.y
+                vehiclePosZ = vehicle.centralBlock.position.z
+            } else if (vehicleType == 1) {
+                offsetX = 14.25;
+                offsetY = 6.5;
+                offsetZ = 8;
+                vehiclePosX = vehicle.frontBlock.position.x
+                vehiclePosY = vehicle.frontBlock.position.y
+                vehiclePosZ = vehicle.frontBlock.position.z
+            } else {
+                offsetX = 9;
+                offsetY = 4;
+                offsetZ = 8;
+                vehiclePosX = vehicle.frontBlock.position.x
+                vehiclePosY = vehicle.frontBlock.position.y
+                vehiclePosZ = vehicle.frontBlock.position.z
+            }
+            if (Math.abs(rabbitPosX-vehiclePosX) < offsetX) {
+                if (Math.abs(rabbitPosY-vehiclePosY) < offsetY) {
+                    if (Math.abs(rabbitPosZ-vehiclePosZ) < offsetZ) {
+                        crash = true;
+                        clearInterval(crashFunction);
+                        crashAnimation();
                     }
                 }
-                    
             }
         }
     }
