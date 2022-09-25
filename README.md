@@ -7,7 +7,7 @@ Commands:
   
   W -> Jump Forward
   A -> Jump Left
-  D -> Jump Forward
+  D -> Jump Right
 
 Launch the game at https://sapienzainteractivegraphicscourse.github.io/final-project-nunziatocrisafulli/main.html
 
